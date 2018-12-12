@@ -1,40 +1,34 @@
 <!DOCTYPE html>
+<?php
+
+function getsite($url) {
+    $parse = parse_url($url);
+    $domain = $parse['scheme'] . '://' . $parse['host'] . '/';
+    $content = file_get_contents($url);
+    $base_url = '';
+    $content = str_replace('', $base_url . '', $content);
+    $content = str_replace('src="/', 'src="' . $domain, $content);
+    $content = str_replace('href="/', 'href="' . $domain, $content);
+    return $content;
+}
+
+if (isset($_POST['url'])) {
+    $html = getsite($_POST['url']);
+}
+?>
 <html>
 <head>
 </head>
 <body>
 <h1>yeet ext</h1>
-<script language="php">
-    function getsite($url) {
-        $parse = parse_url($url);
-        $domain = $parse['scheme'] . '://' . $parse['host'] . '/';
-        $content = file_get_contents($url);
-        $base_url = '';
-        $content = str_replace('', $base_url . '', $content);
-        $content = str_replace('src="/', 'src="' . $domain, $content);
-        $content = str_replace('href="/', 'href="' . $domain, $content);
-        return $content;
-    }
-</script>
-<script>
-    function frame(site) {
-        frame = Document.getElementById('cframe')
-        cframe.src = 'about:blank';
-        cframe.contentWindow.document.open();
-        cframe.contentWindow.document.write(site);
-        cframe.contentWindow.document.close();
-    }
-    function gotourl() {
-        // alert('click')
-        var url = document.getElementById('url').value;
-        alert('the url in the bar is: ' + url);
-        var site = getsite(url);
-        alert('site gotten!\nHTML preview: ' + site[20])
-        frame(site);
-    }
-</script>
-http://<input id='url' type='text' value='www.reddit.com'/>
-<button id='go' type='submit' onClick="gotourl();" value='Go'>Go</button><br>
-<iframe id='cframe' style='width:100%; height:100vh;'></iframe>
+<form action="" method="post">
+    http://<input name='url' type='text' value='www.reddit.com'/>
+    <input id='go' type='submit' value='Go'>
+</form>
+<br>
+<?php if (isset($html)) { ?>
+    <?php echo $html ?>
+<?php } ?>
+</iframe>
 </body>
 </html>
