@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<h1>yeet ext</h1>
+<script language="php"
+function getsite($url) {
+  $parse = parse_url($url);
+  $domain = $parse['scheme'] . '://' . $parse['host'] . '/';
+  $content = file_get_contents($url);
+  $base_url = '';
+  $content = str_replace('', $base_url . '', $content);
+  $content = str_replace('src="/', 'src="' . $domain, $content);
+  $content = str_replace('href="/', 'href="' . $domain, $content);
+  return $content;
+}
+function frame($site) {
+  echo(<iframe>);
+  echo($site);
+  echo(</iframe>);
+}
+</script>
+<script>
+  function gotourl() {
+    var url = Document.getElementById('url').value();
+    var site = getsite(url);
+    frame(site);
+  }
+</script>
+http://<input id='url' type='text' value='www.reddit.com'/>
+<button id='go' type='submit' onClick="gotourl();" value='Go'>Go</button>
+</body>
+</html>
